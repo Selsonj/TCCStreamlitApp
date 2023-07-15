@@ -1,8 +1,8 @@
 import subprocess
-import cv2
 import numpy as np
 import streamlit as st
 from tensorflow.keras.models import load_model
+import cv2
 
 model_path = "gs://tcc_covid19/model_architecture1.h5"
 model = load_model(model_path)
