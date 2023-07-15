@@ -1,5 +1,3 @@
-!pip install streamlit -q
-!pip install google-cloud-storage
 
 import subprocess
 import cv2
