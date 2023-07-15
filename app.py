@@ -1,3 +1,5 @@
+import os
+os.system('pip install opencv-python-headless -q')
 
 import subprocess
 import cv2
