@@ -1,7 +1,6 @@
 import io
 import numpy as np
 import streamlit as st
-from google.cloud import storage
 from PIL import Image
 import tensorflow as tf
 import tensorflow.lite as tflite
