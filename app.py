@@ -14,7 +14,7 @@ def preprocess_image(image):
     return image
 
 def load_model_from_gcs(model_path):
-    bucket_name = "seu-bucket"
+    bucket_name = "tcc_covid19"
     blob_name = "model_architecture1.h5"
 
     storage_client = storage.Client()
