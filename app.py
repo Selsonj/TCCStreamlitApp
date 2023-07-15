@@ -1,11 +1,12 @@
 import io
 import numpy as np
 import streamlit as st
-import tensorflow as tf
 from google.cloud import storage
 from PIL import Image
+import tensorflow as tf
+import tensorflow.lite as tflite
 
-model_path = "gs://tcc_covid19/model_architecture1.h5"
+model_path = "gs://tcc_covid19/model_architecture1.tflite"
 
 def preprocess_image(image):
     image = image.resize((224, 224))
@@ -15,14 +16,15 @@ def preprocess_image(image):
 
 def load_model_from_gcs(model_path):
     bucket_name = "tcc_covid19"
-    blob_name = "model_architecture1.h5"
+    blob_name = "model_architecture1.tflite"
 
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(blob_name)
 
-    blob.download_to_filename("model_architecture1.h5")
-    model = tf.keras.models.load_model("model_architecture1.h5")
+    blob.download_to_filename("model_architecture1.tflite")
+    model = tflite.Interpreter("model_architecture1.tflite")
+    model.allocate_tensors()
 
     return model
 
@@ -39,7 +41,12 @@ def main():
         preprocessed_image = preprocess_image(image)
 
         model = load_model_from_gcs(model_path)
-        prediction = model.predict(preprocessed_image)
+        input_details = model.get_input_details()
+        output_details = model.get_output_details()
+
+        model.set_tensor(input_details[0]['index'], preprocessed_image)
+        model.invoke()
+        prediction = model.get_tensor(output_details[0]['index'])
         class_index = np.argmax(prediction)
         class_label = "COVID-19" if class_index == 0 else "Non-COVID-19"
         confidence = prediction[0][class_index] * 100
