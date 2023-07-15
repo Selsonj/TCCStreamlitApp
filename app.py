@@ -2,6 +2,9 @@ import subprocess
 import numpy as np
 import streamlit as st
 from tensorflow.keras.models import load_model
+subprocess.run(["apt-get", "update"], check=True)
+subprocess.run(["apt-get", "install", "-y", "libgl1-mesa-glx"], check=True)
+
 import cv2
 
 model_path = "gs://tcc_covid19/model_architecture1.h5"
