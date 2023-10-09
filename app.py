@@ -7,6 +7,7 @@ import cv2
 model_path = "gs://tcc_covid19/model_architecture1.h5"
 model = load_model(model_path)
 
+@st.cache
 def preprocess_image(image):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = cv2.resize(image, (224, 224))
@@ -34,3 +35,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
